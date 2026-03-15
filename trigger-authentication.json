@@ -1,0 +1,337 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://keda.sh/schemas/trigger-authentication.json",
+  "title": "KEDA TriggerAuthentication",
+  "description": "A TriggerAuthentication defines authentication parameters for KEDA trigger scalers. It allows referencing secrets, environment variables, pod identity providers, or HashiCorp Vault to supply credentials to scalers.",
+  "type": "object",
+  "required": ["apiVersion", "kind", "metadata", "spec"],
+  "properties": {
+    "apiVersion": {
+      "type": "string",
+      "const": "keda.sh/v1alpha1",
+      "description": "API version for the KEDA TriggerAuthentication resource."
+    },
+    "kind": {
+      "type": "string",
+      "enum": ["TriggerAuthentication", "ClusterTriggerAuthentication"],
+      "description": "Kubernetes resource kind. TriggerAuthentication is namespace-scoped, ClusterTriggerAuthentication is cluster-scoped."
+    },
+    "metadata": {
+      "type": "object",
+      "description": "Standard Kubernetes object metadata.",
+      "required": ["name"],
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Name of the TriggerAuthentication."
+        },
+        "namespace": {
+          "type": "string",
+          "description": "Kubernetes namespace (only for TriggerAuthentication, not ClusterTriggerAuthentication)."
+        },
+        "labels": {
+          "type": "object",
+          "additionalProperties": { "type": "string" },
+          "description": "Key-value labels for the resource."
+        },
+        "annotations": {
+          "type": "object",
+          "additionalProperties": { "type": "string" },
+          "description": "Key-value annotations for the resource."
+        }
+      }
+    },
+    "spec": {
+      "type": "object",
+      "description": "Specification defining the authentication parameters.",
+      "properties": {
+        "podIdentity": {
+          "type": "object",
+          "description": "Pod identity-based authentication configuration.",
+          "properties": {
+            "provider": {
+              "type": "string",
+              "enum": ["azure", "azure-workload", "gcp", "aws", "aws-eks", "aws-kiam"],
+              "description": "The identity provider to use."
+            },
+            "identityId": {
+              "type": "string",
+              "description": "Identity ID for the pod identity provider."
+            },
+            "identityOwner": {
+              "type": "string",
+              "enum": ["keda", "workload"],
+              "description": "Indicates whether the identity is managed by KEDA or the workload.",
+              "default": "keda"
+            },
+            "identityAuthorityHost": {
+              "type": "string",
+              "description": "Authority host URL for the identity provider."
+            },
+            "identityTenantId": {
+              "type": "string",
+              "description": "Tenant ID for the identity provider."
+            }
+          },
+          "required": ["provider"]
+        },
+        "secretTargetRef": {
+          "type": "array",
+          "description": "List of Kubernetes Secrets to use for authentication.",
+          "items": {
+            "type": "object",
+            "required": ["parameter", "name", "key"],
+            "properties": {
+              "parameter": {
+                "type": "string",
+                "description": "Parameter name expected by the scaler."
+              },
+              "name": {
+                "type": "string",
+                "description": "Name of the Kubernetes Secret."
+              },
+              "key": {
+                "type": "string",
+                "description": "Key within the Secret to use."
+              }
+            }
+          }
+        },
+        "env": {
+          "type": "array",
+          "description": "List of environment variables to use for authentication.",
+          "items": {
+            "type": "object",
+            "required": ["parameter", "name"],
+            "properties": {
+              "parameter": {
+                "type": "string",
+                "description": "Parameter name expected by the scaler."
+              },
+              "name": {
+                "type": "string",
+                "description": "Name of the environment variable."
+              },
+              "containerName": {
+                "type": "string",
+                "description": "Container name to resolve the environment variable from."
+              }
+            }
+          }
+        },
+        "hashiCorpVault": {
+          "type": "object",
+          "description": "HashiCorp Vault-based authentication configuration.",
+          "properties": {
+            "address": {
+              "type": "string",
+              "description": "Vault server address URL."
+            },
+            "namespace": {
+              "type": "string",
+              "description": "Vault namespace."
+            },
+            "authentication": {
+              "type": "string",
+              "enum": ["token", "kubernetes"],
+              "description": "Vault authentication method."
+            },
+            "role": {
+              "type": "string",
+              "description": "Vault role for Kubernetes authentication."
+            },
+            "mount": {
+              "type": "string",
+              "description": "Vault auth mount path."
+            },
+            "credential": {
+              "type": "object",
+              "description": "Credentials for Vault authentication.",
+              "properties": {
+                "token": {
+                  "type": "string",
+                  "description": "Vault token (for token authentication)."
+                },
+                "serviceAccount": {
+                  "type": "string",
+                  "description": "Service account path (for Kubernetes authentication)."
+                }
+              }
+            },
+            "secrets": {
+              "type": "array",
+              "description": "List of secrets to retrieve from Vault.",
+              "items": {
+                "type": "object",
+                "required": ["parameter", "key", "path"],
+                "properties": {
+                  "parameter": {
+                    "type": "string",
+                    "description": "Parameter name expected by the scaler."
+                  },
+                  "key": {
+                    "type": "string",
+                    "description": "Key within the Vault secret."
+                  },
+                  "path": {
+                    "type": "string",
+                    "description": "Vault secret path."
+                  }
+                }
+              }
+            }
+          },
+          "required": ["address", "authentication"]
+        },
+        "azureKeyVault": {
+          "type": "object",
+          "description": "Azure Key Vault-based authentication configuration.",
+          "properties": {
+            "vaultUri": {
+              "type": "string",
+              "description": "Azure Key Vault URI."
+            },
+            "podIdentity": {
+              "type": "object",
+              "description": "Pod identity for accessing Azure Key Vault.",
+              "properties": {
+                "provider": {
+                  "type": "string",
+                  "enum": ["azure", "azure-workload"],
+                  "description": "Identity provider for Key Vault access."
+                },
+                "identityId": {
+                  "type": "string",
+                  "description": "Identity ID for Key Vault access."
+                }
+              },
+              "required": ["provider"]
+            },
+            "credentials": {
+              "type": "object",
+              "description": "Service principal credentials for Key Vault access.",
+              "properties": {
+                "clientId": {
+                  "type": "string",
+                  "description": "Azure AD client ID."
+                },
+                "clientSecret": {
+                  "type": "object",
+                  "description": "Reference to the client secret.",
+                  "properties": {
+                    "valueFrom": {
+                      "type": "object",
+                      "properties": {
+                        "secretKeyRef": {
+                          "type": "object",
+                          "properties": {
+                            "name": { "type": "string" },
+                            "key": { "type": "string" }
+                          },
+                          "required": ["name", "key"]
+                        }
+                      }
+                    }
+                  }
+                },
+                "tenantId": {
+                  "type": "string",
+                  "description": "Azure AD tenant ID."
+                }
+              },
+              "required": ["clientId", "tenantId"]
+            },
+            "secrets": {
+              "type": "array",
+              "description": "List of secrets to retrieve from Azure Key Vault.",
+              "items": {
+                "type": "object",
+                "required": ["parameter", "name"],
+                "properties": {
+                  "parameter": {
+                    "type": "string",
+                    "description": "Parameter name expected by the scaler."
+                  },
+                  "name": {
+                    "type": "string",
+                    "description": "Name of the Key Vault secret."
+                  },
+                  "version": {
+                    "type": "string",
+                    "description": "Version of the Key Vault secret."
+                  }
+                }
+              }
+            }
+          },
+          "required": ["vaultUri"]
+        },
+        "gcpSecretManager": {
+          "type": "object",
+          "description": "GCP Secret Manager-based authentication configuration.",
+          "properties": {
+            "podIdentity": {
+              "type": "object",
+              "description": "Pod identity for accessing GCP Secret Manager.",
+              "properties": {
+                "provider": {
+                  "type": "string",
+                  "const": "gcp",
+                  "description": "GCP identity provider."
+                }
+              },
+              "required": ["provider"]
+            },
+            "credentials": {
+              "type": "object",
+              "description": "GCP service account credentials.",
+              "properties": {
+                "clientSecret": {
+                  "type": "object",
+                  "description": "Reference to GCP service account key.",
+                  "properties": {
+                    "valueFrom": {
+                      "type": "object",
+                      "properties": {
+                        "secretKeyRef": {
+                          "type": "object",
+                          "properties": {
+                            "name": { "type": "string" },
+                            "key": { "type": "string" }
+                          },
+                          "required": ["name", "key"]
+                        }
+                      }
+                    }
+                  }
+                }
+              }
+            },
+            "secrets": {
+              "type": "array",
+              "description": "List of secrets to retrieve from GCP Secret Manager.",
+              "items": {
+                "type": "object",
+                "required": ["parameter", "id"],
+                "properties": {
+                  "parameter": {
+                    "type": "string",
+                    "description": "Parameter name expected by the scaler."
+                  },
+                  "id": {
+                    "type": "string",
+                    "description": "GCP Secret Manager secret ID."
+                  },
+                  "version": {
+                    "type": "string",
+                    "description": "Version of the secret."
+                  }
+                }
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

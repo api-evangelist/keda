@@ -1,0 +1,208 @@
+{
+  "$schema": "http://json-schema.org/draft-07/schema#",
+  "$id": "https://keda.sh/schemas/scaled-job.json",
+  "title": "KEDA ScaledJob",
+  "description": "A ScaledJob defines the mapping between an event source and a Kubernetes Job that should be created based on event metrics. Unlike ScaledObject, ScaledJob creates new Job instances rather than scaling existing deployments.",
+  "type": "object",
+  "required": ["apiVersion", "kind", "metadata", "spec"],
+  "properties": {
+    "apiVersion": {
+      "type": "string",
+      "const": "keda.sh/v1alpha1",
+      "description": "API version for the KEDA ScaledJob resource."
+    },
+    "kind": {
+      "type": "string",
+      "const": "ScaledJob",
+      "description": "Kubernetes resource kind."
+    },
+    "metadata": {
+      "type": "object",
+      "description": "Standard Kubernetes object metadata.",
+      "required": ["name"],
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Name of the ScaledJob."
+        },
+        "namespace": {
+          "type": "string",
+          "description": "Kubernetes namespace for the ScaledJob."
+        },
+        "labels": {
+          "type": "object",
+          "additionalProperties": { "type": "string" },
+          "description": "Key-value labels for the resource."
+        },
+        "annotations": {
+          "type": "object",
+          "additionalProperties": { "type": "string" },
+          "description": "Key-value annotations for the resource."
+        }
+      }
+    },
+    "spec": {
+      "type": "object",
+      "description": "Specification defining the job scaling behavior.",
+      "required": ["jobTargetRef", "triggers"],
+      "properties": {
+        "jobTargetRef": {
+          "type": "object",
+          "description": "Template for the Kubernetes Job to be created.",
+          "properties": {
+            "parallelism": {
+              "type": "integer",
+              "description": "Maximum number of pods the Job should run at any given time.",
+              "minimum": 0
+            },
+            "completions": {
+              "type": "integer",
+              "description": "Number of successful completions required for the Job.",
+              "minimum": 0
+            },
+            "activeDeadlineSeconds": {
+              "type": "integer",
+              "description": "Duration in seconds before the Job is terminated.",
+              "minimum": 0
+            },
+            "backoffLimit": {
+              "type": "integer",
+              "description": "Number of retries before marking the Job as failed.",
+              "default": 6,
+              "minimum": 0
+            },
+            "template": {
+              "type": "object",
+              "description": "Pod template specification for the Job."
+            }
+          }
+        },
+        "pollingInterval": {
+          "type": "integer",
+          "description": "Interval in seconds to check each trigger on.",
+          "default": 30,
+          "minimum": 1
+        },
+        "successfulJobsHistoryLimit": {
+          "type": "integer",
+          "description": "Number of completed Jobs to retain.",
+          "default": 100,
+          "minimum": 0
+        },
+        "failedJobsHistoryLimit": {
+          "type": "integer",
+          "description": "Number of failed Jobs to retain.",
+          "default": 100,
+          "minimum": 0
+        },
+        "envSourceContainerName": {
+          "type": "string",
+          "description": "Container name from which KEDA should resolve environment variables."
+        },
+        "maxReplicaCount": {
+          "type": "integer",
+          "description": "Maximum number of Jobs KEDA will create concurrently.",
+          "default": 100,
+          "minimum": 1
+        },
+        "minReplicaCount": {
+          "type": "integer",
+          "description": "Minimum number of Jobs to keep running.",
+          "default": 0,
+          "minimum": 0
+        },
+        "rollout": {
+          "type": "object",
+          "description": "Rollout strategy for the ScaledJob.",
+          "properties": {
+            "strategy": {
+              "type": "string",
+              "enum": ["default", "gradual"],
+              "description": "Rollout strategy type.",
+              "default": "default"
+            },
+            "propagationPolicy": {
+              "type": "string",
+              "enum": ["foreground", "background"],
+              "description": "How to handle cleanup of old Jobs.",
+              "default": "background"
+            }
+          }
+        },
+        "scalingStrategy": {
+          "type": "object",
+          "description": "Strategy for how to scale Jobs based on metrics.",
+          "properties": {
+            "strategy": {
+              "type": "string",
+              "enum": ["default", "custom", "accurate"],
+              "description": "Scaling strategy type.",
+              "default": "default"
+            },
+            "customScalingQueueLengthDeduction": {
+              "type": "integer",
+              "description": "Number to deduct from queue length for custom strategy.",
+              "minimum": 0
+            },
+            "customScalingRunningJobPercentage": {
+              "type": "string",
+              "description": "Percentage of running Jobs to consider for custom strategy."
+            },
+            "pendingPodConditions": {
+              "type": "array",
+              "description": "Pod conditions to consider as pending.",
+              "items": { "type": "string" }
+            },
+            "multipleScalersCalculation": {
+              "type": "string",
+              "enum": ["max", "min", "avg", "sum"],
+              "description": "How to combine metrics from multiple scalers.",
+              "default": "max"
+            }
+          }
+        },
+        "triggers": {
+          "type": "array",
+          "description": "List of triggers that drive job creation.",
+          "minItems": 1,
+          "items": {
+            "type": "object",
+            "required": ["type", "metadata"],
+            "properties": {
+              "type": {
+                "type": "string",
+                "description": "Type of the trigger scaler (e.g., kafka, rabbitmq, prometheus, azure-queue, aws-sqs-queue)."
+              },
+              "name": {
+                "type": "string",
+                "description": "Optional name for the trigger."
+              },
+              "metadata": {
+                "type": "object",
+                "description": "Scaler-specific key-value configuration.",
+                "additionalProperties": { "type": "string" }
+              },
+              "authenticationRef": {
+                "type": "object",
+                "description": "Reference to a TriggerAuthentication or ClusterTriggerAuthentication.",
+                "properties": {
+                  "name": {
+                    "type": "string",
+                    "description": "Name of the TriggerAuthentication resource."
+                  },
+                  "kind": {
+                    "type": "string",
+                    "enum": ["TriggerAuthentication", "ClusterTriggerAuthentication"],
+                    "default": "TriggerAuthentication",
+                    "description": "Kind of the authentication resource."
+                  }
+                },
+                "required": ["name"]
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}

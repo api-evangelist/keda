@@ -1,0 +1,166 @@
+{
+  "@context": {
+    "@vocab": "https://keda.sh/vocab#",
+    "keda": "https://keda.sh/vocab#",
+    "k8s": "https://kubernetes.io/docs/reference/generated/kubernetes-api/v1.28/#",
+    "schema": "https://schema.org/",
+    "dcterms": "http://purl.org/dc/terms/",
+    "rdfs": "http://www.w3.org/2000/01/rdf-schema#",
+    "xsd": "http://www.w3.org/2001/XMLSchema#",
+    "hydra": "http://www.w3.org/ns/hydra/core#",
+    "ssn": "http://www.w3.org/ns/ssn/",
+
+    "ScaledObject": {
+      "@id": "keda:ScaledObject",
+      "@type": "hydra:Class",
+      "rdfs:comment": "A custom resource that defines the mapping between an event source and a Kubernetes workload to be autoscaled.",
+      "rdfs:subClassOf": { "@id": "k8s:CustomResourceDefinition" }
+    },
+    "ScaledJob": {
+      "@id": "keda:ScaledJob",
+      "@type": "hydra:Class",
+      "rdfs:comment": "A custom resource that creates Kubernetes Jobs in response to event-driven triggers.",
+      "rdfs:subClassOf": { "@id": "k8s:CustomResourceDefinition" }
+    },
+    "TriggerAuthentication": {
+      "@id": "keda:TriggerAuthentication",
+      "@type": "hydra:Class",
+      "rdfs:comment": "A custom resource that defines authentication parameters for event source triggers.",
+      "rdfs:subClassOf": { "@id": "k8s:CustomResourceDefinition" }
+    },
+    "ClusterTriggerAuthentication": {
+      "@id": "keda:ClusterTriggerAuthentication",
+      "@type": "hydra:Class",
+      "rdfs:comment": "A cluster-scoped variant of TriggerAuthentication available across all namespaces.",
+      "rdfs:subClassOf": { "@id": "keda:TriggerAuthentication" }
+    },
+
+    "scaleTargetRef": {
+      "@id": "keda:scaleTargetRef",
+      "@type": "@id",
+      "rdfs:comment": "Reference to the Kubernetes workload resource to be scaled.",
+      "rdfs:range": { "@id": "k8s:ObjectReference" }
+    },
+    "jobTargetRef": {
+      "@id": "keda:jobTargetRef",
+      "@type": "@id",
+      "rdfs:comment": "Template for the Kubernetes Job to be created by event triggers.",
+      "rdfs:range": { "@id": "k8s:JobSpec" }
+    },
+    "triggers": {
+      "@id": "keda:triggers",
+      "@type": "@id",
+      "@container": "@list",
+      "rdfs:comment": "Collection of event-driven trigger definitions that provide scaling metrics."
+    },
+    "trigger": {
+      "@id": "keda:Trigger",
+      "@type": "hydra:Class",
+      "rdfs:comment": "An event source trigger that provides metrics for autoscaling decisions."
+    },
+    "triggerType": {
+      "@id": "keda:triggerType",
+      "@type": "xsd:string",
+      "rdfs:comment": "The type of event source scaler (e.g., kafka, rabbitmq, prometheus, aws-sqs-queue)."
+    },
+    "authenticationRef": {
+      "@id": "keda:authenticationRef",
+      "@type": "@id",
+      "rdfs:comment": "Reference to a TriggerAuthentication or ClusterTriggerAuthentication resource.",
+      "rdfs:range": { "@id": "keda:TriggerAuthentication" }
+    },
+
+    "pollingInterval": {
+      "@id": "keda:pollingInterval",
+      "@type": "xsd:integer",
+      "rdfs:comment": "Interval in seconds between trigger metric queries.",
+      "schema:unitCode": "SEC"
+    },
+    "cooldownPeriod": {
+      "@id": "keda:cooldownPeriod",
+      "@type": "xsd:integer",
+      "rdfs:comment": "Period in seconds to wait after the last active trigger before scaling to minimum.",
+      "schema:unitCode": "SEC"
+    },
+    "minReplicaCount": {
+      "@id": "keda:minReplicaCount",
+      "@type": "xsd:integer",
+      "rdfs:comment": "Minimum number of workload replicas.",
+      "rdfs:subPropertyOf": { "@id": "schema:minValue" }
+    },
+    "maxReplicaCount": {
+      "@id": "keda:maxReplicaCount",
+      "@type": "xsd:integer",
+      "rdfs:comment": "Maximum number of workload replicas.",
+      "rdfs:subPropertyOf": { "@id": "schema:maxValue" }
+    },
+    "idleReplicaCount": {
+      "@id": "keda:idleReplicaCount",
+      "@type": "xsd:integer",
+      "rdfs:comment": "Number of replicas when there are no active triggers (below minReplicaCount)."
+    },
+
+    "metricType": {
+      "@id": "keda:metricType",
+      "@type": "xsd:string",
+      "rdfs:comment": "The type of HPA metric: AverageValue, Value, or Utilization.",
+      "rdfs:seeAlso": { "@id": "k8s:MetricSpec" }
+    },
+    "fallback": {
+      "@id": "keda:fallback",
+      "@type": "@id",
+      "rdfs:comment": "Fallback configuration used when a scaler cannot retrieve metrics."
+    },
+    "scalingStrategy": {
+      "@id": "keda:scalingStrategy",
+      "@type": "@id",
+      "rdfs:comment": "Strategy controlling how job counts are calculated from metrics."
+    },
+
+    "secretTargetRef": {
+      "@id": "keda:secretTargetRef",
+      "@type": "@id",
+      "@container": "@list",
+      "rdfs:comment": "References to Kubernetes Secrets providing authentication credentials.",
+      "rdfs:range": { "@id": "k8s:SecretKeySelector" }
+    },
+    "podIdentity": {
+      "@id": "keda:podIdentity",
+      "@type": "@id",
+      "rdfs:comment": "Cloud provider pod identity configuration for workload authentication."
+    },
+    "hashiCorpVault": {
+      "@id": "keda:hashiCorpVault",
+      "@type": "@id",
+      "rdfs:comment": "HashiCorp Vault integration for secret retrieval.",
+      "rdfs:seeAlso": { "@id": "https://www.vaultproject.io/" }
+    },
+    "azureKeyVault": {
+      "@id": "keda:azureKeyVault",
+      "@type": "@id",
+      "rdfs:comment": "Azure Key Vault integration for secret retrieval.",
+      "rdfs:seeAlso": { "@id": "https://azure.microsoft.com/services/key-vault/" }
+    },
+
+    "name": {
+      "@id": "schema:name",
+      "@type": "xsd:string"
+    },
+    "description": {
+      "@id": "schema:description",
+      "@type": "xsd:string"
+    },
+    "url": {
+      "@id": "schema:url",
+      "@type": "@id"
+    },
+    "created": {
+      "@id": "dcterms:created",
+      "@type": "xsd:date"
+    },
+    "modified": {
+      "@id": "dcterms:modified",
+      "@type": "xsd:date"
+    }
+  }
+}
