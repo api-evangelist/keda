@@ -1,0 +1,14 @@
+name: KEDA
+description: Kubernetes Event Driven Autoscaling - application autoscaler that drives
+  scaling of any container in Kubernetes based on the number of events needing to
+  be processed
+url: https://keda.sh/
+tags:
+- Kubernetes
+- Autoscaling
+- Event-Driven
+- CNCF
+created: '2025'
+modified: '2025'
+apis: []
+common: []
