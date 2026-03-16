@@ -1,45 +1,46 @@
+aid: keda
 name: KEDA
-description: Kubernetes Event Driven Autoscaling - application autoscaler that drives
-  scaling of any container in Kubernetes based on the number of events needing to
-  be processed
-url: https://keda.sh/
+description: >-
+  KEDA (Kubernetes Event Driven Autoscaling) is an application autoscaler that
+  drives scaling of any container in Kubernetes based on the number of events
+  needing to be processed. It is a CNCF project.
+type: Index
+image: https://kinlane-productions.s3.amazonaws.com/apis-json/apis-json-logo.jpg
 tags:
-- Kubernetes
-- Autoscaling
-- Event-Driven
-- CNCF
-created: '2025'
-modified: '2025'
+  - Kubernetes
+  - Autoscaling
+  - Event-Driven
+  - CNCF
+url: https://raw.githubusercontent.com/api-evangelist/keda/refs/heads/main/apis.yml
+created: '2025-01-01'
+modified: '2026-03-16'
+specificationVersion: '0.19'
 apis:
-- name: KEDA Metrics API
-  description: External metrics API server that exposes event-driven metrics from
-    configured scalers to the Kubernetes Horizontal Pod Autoscaler, enabling
-    scaling decisions based on external event sources.
-  url: https://keda.sh/docs/latest/operate/metrics-server/
-  tags:
-  - Metrics
-  - External Metrics
-  - HPA
-  - Kubernetes API
-  properties:
-  - type: json-schema
-    title: ScaledObject JSON Schema
-    url: scaled-object.json
-    description: JSON Schema for the KEDA ScaledObject custom resource definition
-      that maps event sources to Kubernetes workloads for autoscaling.
-  - type: json-schema
-    title: ScaledJob JSON Schema
-    url: scaled-job.json
-    description: JSON Schema for the KEDA ScaledJob custom resource definition
-      that creates Kubernetes Jobs based on event-driven triggers.
-  - type: json-schema
-    title: TriggerAuthentication JSON Schema
-    url: trigger-authentication.json
-    description: JSON Schema for the KEDA TriggerAuthentication custom resource
-      definition that provides authentication parameters to event source scalers.
-  - type: json-ld-context
-    title: KEDA JSON-LD Context
-    url: keda-context.jsonld
-    description: JSON-LD context mapping KEDA autoscaling concepts to linked data
-      vocabularies including Schema.org, Dublin Core, Hydra, and Kubernetes references.
-common: []
+  - aid: keda:keda-metrics-api
+    name: KEDA Metrics API
+    description: >-
+      External metrics API server that exposes event-driven metrics from
+      configured scalers to the Kubernetes Horizontal Pod Autoscaler.
+    humanURL: https://keda.sh/docs/latest/operate/metrics-server/
+    tags:
+      - Metrics
+      - External Metrics
+      - HPA
+      - Kubernetes
+    properties:
+      - type: Documentation
+        url: https://keda.sh/docs/latest/operate/metrics-server/
+      - type: Getting Started
+        url: https://keda.sh/docs/latest/deploy/
+common:
+  - type: Website
+    url: https://keda.sh/
+  - type: Documentation
+    url: https://keda.sh/docs/latest/
+  - type: Getting Started
+    url: https://keda.sh/docs/latest/deploy/
+  - type: GitHub Organization
+    url: https://github.com/kedacore/keda
+maintainers:
+  - FN: Kin Lane
+    email: kin@apievangelist.com
