@@ -1,0 +1,231 @@
+asyncapi: 2.6.0
+info:
+  title: KEDA CloudEvent Source
+  description: >-
+    KEDA emits CloudEvents to configured HTTP or Azure Event Grid destinations
+    when scaling events occur. The CloudEventSource and ClusterCloudEventSource
+    custom resources define the destination endpoint and filter which event
+    types are delivered. Events follow the CloudEvents specification v1.0 and
+    carry information about KEDA scaling actions including scale target changes,
+    errors, and authentication failures. Consumers can use these events to
+    trigger downstream workflows, populate dashboards, or audit scaling activity.
+  version: '2.x'
+  contact:
+    name: KEDA Community
+    url: https://keda.sh/community/
+  license:
+    name: Apache 2.0
+    url: https://www.apache.org/licenses/LICENSE-2.0
+externalDocs:
+  description: KEDA CloudEvent Support Documentation
+  url: https://keda.sh/docs/latest/operate/cloud-events/
+servers:
+  httpSink:
+    url: '{sinkUrl}'
+    protocol: https
+    description: >-
+      HTTP(S) endpoint configured in the CloudEventSource destination.http.uri
+      field. KEDA POSTs CloudEvents to this URL as they occur.
+    variables:
+      sinkUrl:
+        description: The full HTTPS URL of the CloudEvent sink endpoint.
+        default: https://your-sink.example.com/events
+channels:
+  /events:
+    description: >-
+      HTTP endpoint receiving CloudEvents emitted by KEDA. KEDA sends a POST
+      request for each scaling event to the configured sink URL.
+    publish:
+      operationId: receiveKedaCloudEvent
+      summary: Receive a KEDA CloudEvent
+      description: >-
+        KEDA delivers a CloudEvent to this channel when a scaling-related event
+        occurs. The event type determines the specific scaling action that
+        triggered delivery. Consumers should inspect the type field to determine
+        how to process the event data.
+      message:
+        oneOf:
+          - $ref: '#/components/messages/ScalerErrorEvent'
+          - $ref: '#/components/messages/ScaledObjectReadyEvent'
+          - $ref: '#/components/messages/ScaledObjectDeletedEvent'
+          - $ref: '#/components/messages/ScaledJobReadyEvent'
+          - $ref: '#/components/messages/ScaledJobDeletedEvent'
+          - $ref: '#/components/messages/AuthenticationFailedEvent'
+components:
+  securitySchemes:
+    bearerAuth:
+      type: http
+      scheme: bearer
+      description: >-
+        Optional bearer token for authenticating CloudEvent delivery to the
+        sink, configured via a TriggerAuthentication reference on the
+        CloudEventSource.
+  messages:
+    ScalerErrorEvent:
+      name: ScalerError
+      title: Scaler Error
+      summary: A KEDA scaler encountered an error retrieving metrics
+      contentType: application/json
+      payload:
+        $ref: '#/components/schemas/KedaCloudEvent'
+      examples:
+        - name: scalerError
+          summary: Scaler failed to retrieve metrics
+          payload:
+            specversion: '1.0'
+            type: com.cloudeventsource.keda
+            source: /cluster-name/keda-namespace/keda
+            subject: /cluster-name/default/scaledobject/my-scaledobject
+            id: a1b2c3d4-e5f6-7890-abcd-ef1234567890
+            time: '2026-03-18T10:00:00Z'
+            datacontenttype: application/json
+            data:
+              reason: ScalerError
+              message: >-
+                Error when getting metric for trigger type kafka. Unable to
+                connect to broker at kafka-broker:9092
+
+    ScaledObjectReadyEvent:
+      name: ScaledObjectReady
+      title: ScaledObject Ready
+      summary: A ScaledObject has been successfully created and is active
+      contentType: application/json
+      payload:
+        $ref: '#/components/schemas/KedaCloudEvent'
+      examples:
+        - name: scaledObjectReady
+          payload:
+            specversion: '1.0'
+            type: com.cloudeventsource.keda
+            source: /cluster-name/keda-namespace/keda
+            subject: /cluster-name/default/scaledobject/my-scaledobject
+            id: b2c3d4e5-f6a7-8901-bcde-f12345678901
+            time: '2026-03-18T10:01:00Z'
+            datacontenttype: application/json
+            data:
+              reason: ScaledObjectReady
+              message: ScaledObject my-scaledobject is ready for scaling
+
+    ScaledObjectDeletedEvent:
+      name: ScaledObjectDeleted
+      title: ScaledObject Deleted
+      summary: A ScaledObject has been deleted
+      contentType: application/json
+      payload:
+        $ref: '#/components/schemas/KedaCloudEvent'
+
+    ScaledJobReadyEvent:
+      name: ScaledJobReady
+      title: ScaledJob Ready
+      summary: A ScaledJob has been successfully created and is active
+      contentType: application/json
+      payload:
+        $ref: '#/components/schemas/KedaCloudEvent'
+
+    ScaledJobDeletedEvent:
+      name: ScaledJobDeleted
+      title: ScaledJob Deleted
+      summary: A ScaledJob has been deleted
+      contentType: application/json
+      payload:
+        $ref: '#/components/schemas/KedaCloudEvent'
+
+    AuthenticationFailedEvent:
+      name: AuthenticationFailed
+      title: Authentication Failed
+      summary: A TriggerAuthentication credential check failed
+      contentType: application/json
+      payload:
+        $ref: '#/components/schemas/KedaCloudEvent'
+
+  schemas:
+    KedaCloudEvent:
+      type: object
+      description: >-
+        A CloudEvent (v1.0) emitted by KEDA when a scaling-related event occurs.
+        Follows the CloudEvents specification envelope with a KEDA-specific data
+        payload containing the reason and message for the event.
+      required:
+        - specversion
+        - type
+        - source
+        - subject
+        - id
+        - time
+        - datacontenttype
+        - data
+      properties:
+        specversion:
+          type: string
+          const: '1.0'
+          description: CloudEvents specification version. Always 1.0.
+        type:
+          type: string
+          const: com.cloudeventsource.keda
+          description: >-
+            CloudEvent type identifier. Always com.cloudeventsource.keda for
+            events emitted by KEDA.
+        source:
+          type: string
+          description: >-
+            URI identifying the event source in the format
+            /{cluster-name}/{keda-namespace}/keda. The cluster-name is set
+            via the clusterName field in the CloudEventSource spec.
+          example: /my-cluster/keda/keda
+        subject:
+          type: string
+          description: >-
+            URI identifying the specific resource that generated the event in
+            the format /{cluster-name}/{namespace}/{object-type}/{object-name}.
+          example: /my-cluster/default/scaledobject/my-app-scaler
+        id:
+          type: string
+          format: uuid
+          description: Unique identifier for this event instance.
+          example: a1b2c3d4-e5f6-7890-abcd-ef1234567890
+        time:
+          type: string
+          format: date-time
+          description: Timestamp of when the event occurred in ISO 8601 format.
+          example: '2026-03-18T10:00:00Z'
+        datacontenttype:
+          type: string
+          const: application/json
+          description: MIME type of the data field. Always application/json.
+        data:
+          $ref: '#/components/schemas/KedaEventData'
+
+    KedaEventData:
+      type: object
+      description: >-
+        The payload of a KEDA CloudEvent containing the reason code and
+        human-readable message describing the scaling event.
+      required:
+        - reason
+        - message
+      properties:
+        reason:
+          type: string
+          description: >-
+            Machine-readable reason code for the event. Corresponds to KEDA
+            Kubernetes event reasons such as ScalerError, ScaledObjectReady,
+            ScaledObjectDeleted, ScaledJobReady, ScaledJobDeleted, or
+            AuthenticationFailed.
+          enum:
+            - ScalerError
+            - ScaledObjectReady
+            - ScaledObjectDeleted
+            - ScaledJobReady
+            - ScaledJobDeleted
+            - KEDAScalersStarted
+            - KEDAScalersStopped
+            - AuthenticationFailed
+          example: ScalerError
+        message:
+          type: string
+          description: >-
+            Human-readable description of the event, providing context about
+            what happened and which resource was affected.
+          example: >-
+            Error when getting metric for trigger type kafka. Unable to
+            connect to broker at kafka-broker:9092

@@ -1,0 +1,325 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://keda.sh/schemas/keda/scaled-object.json",
+  "title": "KEDA ScaledObject",
+  "description": "A ScaledObject defines the mapping between an event source and the Kubernetes Deployment, StatefulSet, or Custom Resource that should be scaled based on event metrics. It specifies trigger scalers, scaling thresholds, min/max replica counts, and cooldown periods for workload-based autoscaling.",
+  "type": "object",
+  "required": ["apiVersion", "kind", "metadata", "spec"],
+  "properties": {
+    "apiVersion": {
+      "type": "string",
+      "const": "keda.sh/v1alpha1",
+      "description": "API version for the KEDA ScaledObject resource."
+    },
+    "kind": {
+      "type": "string",
+      "const": "ScaledObject",
+      "description": "Kubernetes resource kind identifier."
+    },
+    "metadata": {
+      "$ref": "#/$defs/ObjectMeta"
+    },
+    "spec": {
+      "$ref": "#/$defs/ScaledObjectSpec"
+    },
+    "status": {
+      "$ref": "#/$defs/ScaledObjectStatus"
+    }
+  },
+  "$defs": {
+    "ObjectMeta": {
+      "type": "object",
+      "description": "Standard Kubernetes object metadata.",
+      "required": ["name"],
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Name of the resource within the namespace.",
+          "maxLength": 253
+        },
+        "namespace": {
+          "type": "string",
+          "description": "Kubernetes namespace the resource belongs to.",
+          "maxLength": 63
+        },
+        "labels": {
+          "type": "object",
+          "description": "Key-value pairs used for organizing and selecting resources.",
+          "additionalProperties": { "type": "string" }
+        },
+        "annotations": {
+          "type": "object",
+          "description": "Non-identifying key-value metadata attached to the resource.",
+          "additionalProperties": { "type": "string" }
+        }
+      }
+    },
+    "ScaledObjectSpec": {
+      "type": "object",
+      "description": "Specification defining the scaling behavior and trigger configuration for a ScaledObject.",
+      "required": ["scaleTargetRef", "triggers"],
+      "properties": {
+        "scaleTargetRef": {
+          "$ref": "#/$defs/ScaleTargetRef"
+        },
+        "pollingInterval": {
+          "type": "integer",
+          "description": "Interval in seconds between queries to each trigger scaler. Defaults to 30 seconds.",
+          "default": 30,
+          "minimum": 1
+        },
+        "cooldownPeriod": {
+          "type": "integer",
+          "description": "Seconds to wait after the last active trigger before scaling to zero or minimum. Defaults to 300 seconds.",
+          "default": 300,
+          "minimum": 0
+        },
+        "idleReplicaCount": {
+          "type": "integer",
+          "description": "Replica count when there are no active events, below minReplicaCount. Allows true scale-to-zero while minReplicaCount maintains a baseline during active periods.",
+          "minimum": 0
+        },
+        "minReplicaCount": {
+          "type": "integer",
+          "description": "Minimum number of replicas KEDA will scale the target to during active scaling. Defaults to 0.",
+          "default": 0,
+          "minimum": 0
+        },
+        "maxReplicaCount": {
+          "type": "integer",
+          "description": "Maximum number of replicas KEDA will scale the target to. Defaults to 100.",
+          "default": 100,
+          "minimum": 1
+        },
+        "fallback": {
+          "$ref": "#/$defs/Fallback"
+        },
+        "advanced": {
+          "$ref": "#/$defs/AdvancedConfig"
+        },
+        "triggers": {
+          "type": "array",
+          "description": "List of event source trigger scalers that provide metrics for autoscaling decisions. At least one trigger must be specified.",
+          "minItems": 1,
+          "items": {
+            "$ref": "#/$defs/ScaleTrigger"
+          }
+        }
+      }
+    },
+    "ScaleTargetRef": {
+      "type": "object",
+      "description": "Reference to the Kubernetes workload resource that KEDA should scale.",
+      "required": ["name"],
+      "properties": {
+        "apiVersion": {
+          "type": "string",
+          "description": "API version of the target resource. Defaults to apps/v1 for Deployment and StatefulSet."
+        },
+        "kind": {
+          "type": "string",
+          "description": "Kind of the target workload resource.",
+          "default": "Deployment",
+          "enum": ["Deployment", "StatefulSet", "CustomResource"]
+        },
+        "name": {
+          "type": "string",
+          "description": "Name of the target workload resource in the same namespace as the ScaledObject."
+        },
+        "envSourceContainerName": {
+          "type": "string",
+          "description": "Container name within the target workload from which KEDA resolves environment variables referenced in trigger metadata."
+        }
+      }
+    },
+    "Fallback": {
+      "type": "object",
+      "description": "Fallback configuration used when a scaler cannot retrieve metrics. When the failure threshold is reached, KEDA uses the configured replica count instead of the scaler value.",
+      "required": ["failureThreshold", "replicas"],
+      "properties": {
+        "failureThreshold": {
+          "type": "integer",
+          "description": "Number of consecutive metric retrieval failures before activating the fallback replica count.",
+          "minimum": 1
+        },
+        "replicas": {
+          "type": "integer",
+          "description": "Number of replicas to maintain when the fallback is active.",
+          "minimum": 0
+        }
+      }
+    },
+    "AdvancedConfig": {
+      "type": "object",
+      "description": "Advanced configuration options for fine-tuning ScaledObject scaling behavior.",
+      "properties": {
+        "restoreToOriginalReplicaCount": {
+          "type": "boolean",
+          "description": "When true, restores the original replica count recorded before KEDA began managing the resource upon ScaledObject deletion. Defaults to false.",
+          "default": false
+        },
+        "horizontalPodAutoscalerConfig": {
+          "$ref": "#/$defs/HPAConfig"
+        }
+      }
+    },
+    "HPAConfig": {
+      "type": "object",
+      "description": "Configuration for the Kubernetes HorizontalPodAutoscaler managed by KEDA for this ScaledObject.",
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Optional custom name for the HPA resource created by KEDA."
+        },
+        "behavior": {
+          "type": "object",
+          "description": "HPA scaling behavior policies controlling scale-up and scale-down rates and stabilization windows.",
+          "properties": {
+            "scaleUp": {
+              "type": "object",
+              "description": "Policies controlling the rate at which replicas are added during scale-up events."
+            },
+            "scaleDown": {
+              "type": "object",
+              "description": "Policies controlling the rate at which replicas are removed during scale-down events."
+            }
+          }
+        }
+      }
+    },
+    "ScaleTrigger": {
+      "type": "object",
+      "description": "A single event source trigger scaler configuration within a ScaledObject or ScaledJob. Each trigger connects to one event source and provides a metric value.",
+      "required": ["type", "metadata"],
+      "properties": {
+        "type": {
+          "type": "string",
+          "description": "Type identifier for the KEDA scaler plugin, such as kafka, rabbitmq, prometheus, aws-sqs-queue, azure-queue, redis, or cron.",
+          "example": "kafka"
+        },
+        "name": {
+          "type": "string",
+          "description": "Optional display name for this trigger, used in metric names and logging."
+        },
+        "useCachedMetrics": {
+          "type": "boolean",
+          "description": "When true, KEDA returns the last known metric value if the scaler temporarily fails to retrieve a fresh value.",
+          "default": false
+        },
+        "metadata": {
+          "type": "object",
+          "description": "Scaler-specific configuration key-value pairs. The supported keys depend on the trigger type; refer to the scaler documentation for each type.",
+          "additionalProperties": { "type": "string" }
+        },
+        "authenticationRef": {
+          "$ref": "#/$defs/AuthenticationRef"
+        },
+        "metricType": {
+          "type": "string",
+          "description": "The HPA metric type to use when comparing the scaler value to the threshold.",
+          "default": "AverageValue",
+          "enum": ["AverageValue", "Value", "Utilization"]
+        }
+      }
+    },
+    "AuthenticationRef": {
+      "type": "object",
+      "description": "Reference to a TriggerAuthentication or ClusterTriggerAuthentication resource providing credentials for the scaler.",
+      "required": ["name"],
+      "properties": {
+        "name": {
+          "type": "string",
+          "description": "Name of the TriggerAuthentication or ClusterTriggerAuthentication resource."
+        },
+        "kind": {
+          "type": "string",
+          "description": "Kind of the authentication resource. Defaults to TriggerAuthentication (namespace-scoped).",
+          "default": "TriggerAuthentication",
+          "enum": ["TriggerAuthentication", "ClusterTriggerAuthentication"]
+        }
+      }
+    },
+    "ScaledObjectStatus": {
+      "type": "object",
+      "description": "Current status of the ScaledObject as reported by the KEDA operator.",
+      "properties": {
+        "scaleTargetKind": {
+          "type": "string",
+          "description": "Resolved kind of the scale target resource."
+        },
+        "scaleTargetGVKR": {
+          "type": "object",
+          "description": "Full GroupVersionKindResource of the scale target."
+        },
+        "lastActiveTime": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Timestamp of when the ScaledObject last had at least one active trigger."
+        },
+        "externalMetricNames": {
+          "type": "array",
+          "description": "Names of the external metrics registered with the KEDA metrics server for this ScaledObject.",
+          "items": { "type": "string" }
+        },
+        "resourceMetricNames": {
+          "type": "array",
+          "description": "Names of any resource metrics (CPU/memory) registered for this ScaledObject.",
+          "items": { "type": "string" }
+        },
+        "conditions": {
+          "type": "array",
+          "description": "Current conditions describing the state of the ScaledObject.",
+          "items": { "$ref": "#/$defs/Condition" }
+        },
+        "health": {
+          "type": "object",
+          "description": "Health status of each trigger scaler keyed by trigger name.",
+          "additionalProperties": {
+            "type": "object",
+            "properties": {
+              "numberOfFailures": {
+                "type": "integer",
+                "description": "Number of consecutive failures for this trigger."
+              },
+              "status": {
+                "type": "string",
+                "enum": ["Happy", "Failing"],
+                "description": "Current health status of the trigger."
+              }
+            }
+          }
+        }
+      }
+    },
+    "Condition": {
+      "type": "object",
+      "description": "A Kubernetes-style status condition on a KEDA resource.",
+      "required": ["type", "status"],
+      "properties": {
+        "type": {
+          "type": "string",
+          "description": "Condition type, such as Ready, Active, or Fallback.",
+          "example": "Ready"
+        },
+        "status": {
+          "type": "string",
+          "description": "Whether this condition is True, False, or Unknown.",
+          "enum": ["True", "False", "Unknown"]
+        },
+        "reason": {
+          "type": "string",
+          "description": "Machine-readable reason for the current condition status."
+        },
+        "message": {
+          "type": "string",
+          "description": "Human-readable message with details about the condition."
+        },
+        "lastTransitionTime": {
+          "type": "string",
+          "format": "date-time",
+          "description": "Timestamp of the last transition of this condition."
+        }
+      }
+    }
+  }
+}

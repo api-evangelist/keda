@@ -1,0 +1,217 @@
+{
+  "$schema": "https://json-schema.org/draft/2020-12/schema",
+  "$id": "https://keda.sh/schemas/keda/cloud-event.json",
+  "title": "KEDA CloudEvent",
+  "description": "Schema for CloudEvents emitted by KEDA when scaling-related events occur. Events follow the CloudEvents specification v1.0 and are delivered to HTTP or Azure Event Grid destinations configured in a CloudEventSource or ClusterCloudEventSource resource.",
+  "type": "object",
+  "required": ["specversion", "type", "source", "subject", "id", "time", "datacontenttype", "data"],
+  "properties": {
+    "specversion": {
+      "type": "string",
+      "const": "1.0",
+      "description": "CloudEvents specification version. Always 1.0 for KEDA events."
+    },
+    "type": {
+      "type": "string",
+      "const": "com.cloudeventsource.keda",
+      "description": "CloudEvent type identifier. Always com.cloudeventsource.keda for events emitted by KEDA."
+    },
+    "source": {
+      "type": "string",
+      "pattern": "^/[^/]*/[^/]*/keda$",
+      "description": "URI identifying the KEDA instance that emitted the event, in the format /{cluster-name}/{keda-namespace}/keda.",
+      "example": "/my-cluster/keda/keda"
+    },
+    "subject": {
+      "type": "string",
+      "pattern": "^/[^/]*/[^/]*/[^/]*/[^/]*$",
+      "description": "URI identifying the specific resource that triggered the event, in the format /{cluster-name}/{namespace}/{object-type}/{object-name}.",
+      "example": "/my-cluster/default/scaledobject/my-app-scaler"
+    },
+    "id": {
+      "type": "string",
+      "format": "uuid",
+      "description": "Unique identifier for this CloudEvent instance.",
+      "example": "a1b2c3d4-e5f6-7890-abcd-ef1234567890"
+    },
+    "time": {
+      "type": "string",
+      "format": "date-time",
+      "description": "ISO 8601 timestamp of when the event was emitted.",
+      "example": "2026-03-18T10:00:00Z"
+    },
+    "datacontenttype": {
+      "type": "string",
+      "const": "application/json",
+      "description": "MIME type of the data field. Always application/json."
+    },
+    "data": {
+      "$ref": "#/$defs/EventData"
+    }
+  },
+  "$defs": {
+    "EventData": {
+      "type": "object",
+      "description": "Payload data carried by a KEDA CloudEvent, providing machine-readable reason code and human-readable detail message.",
+      "required": ["reason", "message"],
+      "properties": {
+        "reason": {
+          "type": "string",
+          "description": "Machine-readable reason code identifying the type of scaling event that occurred.",
+          "enum": [
+            "ScalerError",
+            "ScaledObjectReady",
+            "ScaledObjectDeleted",
+            "ScaledJobReady",
+            "ScaledJobDeleted",
+            "KEDAScalersStarted",
+            "KEDAScalersStopped",
+            "AuthenticationFailed"
+          ],
+          "example": "ScalerError"
+        },
+        "message": {
+          "type": "string",
+          "description": "Human-readable description providing context about the scaling event, including which resource was affected and any error details.",
+          "example": "Error when getting metric for trigger type kafka. Unable to connect to broker at kafka-broker:9092"
+        }
+      }
+    },
+    "CloudEventSource": {
+      "type": "object",
+      "description": "Kubernetes custom resource that configures where KEDA delivers CloudEvents. CloudEventSource is namespace-scoped; ClusterCloudEventSource is cluster-scoped.",
+      "required": ["apiVersion", "kind", "metadata", "spec"],
+      "properties": {
+        "apiVersion": {
+          "type": "string",
+          "const": "eventing.keda.sh/v1alpha1",
+          "description": "API version for the KEDA CloudEventSource resource."
+        },
+        "kind": {
+          "type": "string",
+          "enum": ["CloudEventSource", "ClusterCloudEventSource"],
+          "description": "Resource kind. CloudEventSource is namespace-scoped; ClusterCloudEventSource applies cluster-wide."
+        },
+        "metadata": {
+          "type": "object",
+          "description": "Standard Kubernetes object metadata.",
+          "required": ["name"],
+          "properties": {
+            "name": {
+              "type": "string",
+              "description": "Name of the CloudEventSource resource."
+            },
+            "namespace": {
+              "type": "string",
+              "description": "Namespace (CloudEventSource only)."
+            }
+          }
+        },
+        "spec": {
+          "$ref": "#/$defs/CloudEventSourceSpec"
+        }
+      }
+    },
+    "CloudEventSourceSpec": {
+      "type": "object",
+      "description": "Specification for a CloudEventSource defining the destination and optional event type filters.",
+      "required": ["destination"],
+      "properties": {
+        "clusterName": {
+          "type": "string",
+          "description": "Optional cluster name included in the CloudEvent source and subject fields. Defaults to the Kubernetes cluster name if discoverable."
+        },
+        "authenticationRef": {
+          "type": "object",
+          "description": "Optional reference to a TriggerAuthentication for authenticating CloudEvent delivery to the destination.",
+          "required": ["name"],
+          "properties": {
+            "name": {
+              "type": "string",
+              "description": "Name of the TriggerAuthentication resource."
+            },
+            "kind": {
+              "type": "string",
+              "enum": ["TriggerAuthentication", "ClusterTriggerAuthentication"],
+              "description": "Kind of the authentication resource."
+            }
+          }
+        },
+        "destination": {
+          "$ref": "#/$defs/CloudEventDestination"
+        },
+        "eventSubscription": {
+          "$ref": "#/$defs/EventSubscription"
+        }
+      }
+    },
+    "CloudEventDestination": {
+      "type": "object",
+      "description": "Destination configuration for CloudEvent delivery. Either an HTTP endpoint or Azure Event Grid topic must be configured.",
+      "properties": {
+        "http": {
+          "type": "object",
+          "description": "HTTP destination configuration for CloudEvent delivery.",
+          "required": ["uri"],
+          "properties": {
+            "uri": {
+              "type": "string",
+              "format": "uri",
+              "description": "HTTP(S) URL to which KEDA will POST CloudEvents.",
+              "example": "https://my-sink.example.com/events"
+            }
+          }
+        },
+        "azureEventGridTopic": {
+          "type": "object",
+          "description": "Azure Event Grid destination configuration for CloudEvent delivery.",
+          "required": ["endpoint"],
+          "properties": {
+            "endpoint": {
+              "type": "string",
+              "format": "uri",
+              "description": "Azure Event Grid topic endpoint URL.",
+              "example": "https://my-topic.eventgrid.azure.net/api/events"
+            }
+          }
+        }
+      }
+    },
+    "EventSubscription": {
+      "type": "object",
+      "description": "Optional event type filter configuration for the CloudEventSource.",
+      "properties": {
+        "includedEventTypes": {
+          "type": "array",
+          "description": "When specified, only events with these reason codes are delivered. All others are suppressed.",
+          "items": {
+            "type": "string",
+            "enum": [
+              "keda.scaledobject.ready.v1",
+              "keda.scaledobject.removed.v1",
+              "keda.scaledobject.failed.v1",
+              "keda.scaledjob.ready.v1",
+              "keda.scaledjob.removed.v1",
+              "keda.scaledjob.failed.v1"
+            ]
+          }
+        },
+        "excludedEventTypes": {
+          "type": "array",
+          "description": "Events with these reason codes are suppressed and not delivered.",
+          "items": {
+            "type": "string",
+            "enum": [
+              "keda.scaledobject.ready.v1",
+              "keda.scaledobject.removed.v1",
+              "keda.scaledobject.failed.v1",
+              "keda.scaledjob.ready.v1",
+              "keda.scaledjob.removed.v1",
+              "keda.scaledjob.failed.v1"
+            ]
+          }
+        }
+      }
+    }
+  }
+}
