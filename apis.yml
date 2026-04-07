@@ -10,11 +10,11 @@ description: >-
 type: Index
 image: https://kinlane-productions.s3.amazonaws.com/apis-json/apis-json-logo.jpg
 tags:
-  - Kubernetes
   - Autoscaling
-  - Event-Driven
   - CNCF
+  - Event-Driven
   - Graduated
+  - Kubernetes
 url: https://raw.githubusercontent.com/api-evangelist/keda/refs/heads/main/apis.yml
 created: '2025-01-01'
 modified: '2026-03-18'
@@ -30,10 +30,10 @@ apis:
       scaling decisions.
     humanURL: https://keda.sh/docs/latest/operate/metrics-server/
     tags:
-      - Metrics
       - External Metrics
       - HPA
       - Kubernetes
+      - Metrics
     properties:
       - type: Documentation
         url: https://keda.sh/docs/latest/operate/metrics-server/
@@ -53,9 +53,9 @@ apis:
       periods for workload-based autoscaling.
     humanURL: https://keda.sh/docs/latest/concepts/scaling-deployments/
     tags:
-      - Kubernetes
-      - CRD
       - Autoscaling
+      - CRD
+      - Kubernetes
       - ScaledObject
     properties:
       - type: Documentation
@@ -78,10 +78,10 @@ apis:
       long-running deployments, making it suited for batch workloads.
     humanURL: https://keda.sh/docs/latest/concepts/scaling-jobs/
     tags:
-      - Kubernetes
-      - CRD
       - Autoscaling
+      - CRD
       - Jobs
+      - Kubernetes
     properties:
       - type: Documentation
         url: https://keda.sh/docs/latest/concepts/scaling-jobs/
@@ -101,9 +101,9 @@ apis:
       Identity, or HashiCorp Vault without embedding them in the ScaledObject.
     humanURL: https://keda.sh/docs/latest/concepts/authentication/
     tags:
-      - Kubernetes
-      - CRD
       - Authentication
+      - CRD
+      - Kubernetes
       - Security
     properties:
       - type: Documentation
@@ -126,10 +126,10 @@ apis:
       events they care about.
     humanURL: https://keda.sh/docs/latest/operate/cloud-events/
     tags:
-      - Kubernetes
-      - CRD
       - CloudEvents
+      - CRD
       - Events
+      - Kubernetes
       - Webhooks
     properties:
       - type: Documentation
