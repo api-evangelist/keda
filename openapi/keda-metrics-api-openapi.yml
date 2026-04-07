@@ -39,7 +39,7 @@ paths:
   /{metricPath}:
     get:
       operationId: getMetricValue
-      summary: Get metric value
+      summary: KEDA Get metric value
       description: >-
         Returns a JSON (or other format) payload containing a numeric metric
         value that KEDA extracts using the configured valueLocation path
