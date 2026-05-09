@@ -1,0 +1,13 @@
+{
+  "repo": "keda",
+  "feeds": [
+    {
+      "source": "https://keda.sh/blog/",
+      "feed_url": "https://keda.sh/blog/index.xml",
+      "title": "The KEDA Blog on KEDA",
+      "saved": 17
+    }
+  ],
+  "fetched": "2026-05-09T20:17:51Z",
+  "post_count": 17
+}
