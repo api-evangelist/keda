@@ -37,7 +37,7 @@ apis:
     properties:
       - type: Documentation
         url: https://keda.sh/docs/latest/operate/metrics-server/
-      - type: Getting Started
+      - type: GettingStarted
         url: https://keda.sh/docs/latest/deploy/
       - type: Reference
         url: https://keda.sh/docs/latest/concepts/
@@ -64,7 +64,7 @@ apis:
         url: scaled-object.json
       - type: JSONSchema
         url: json-schema/keda-scaled-object-schema.json
-      - type: JSON-LD
+      - type: JSONLD
         url: keda-context.jsonld
       - type: Reference
         url: https://keda.sh/docs/latest/reference/scaledobject-spec/
@@ -87,7 +87,7 @@ apis:
         url: https://keda.sh/docs/latest/concepts/scaling-jobs/
       - type: JSONSchema
         url: scaled-job.json
-      - type: JSON-LD
+      - type: JSONLD
         url: keda-context.jsonld
       - type: Reference
         url: https://keda.sh/docs/latest/reference/scaledjob-spec/
@@ -110,7 +110,7 @@ apis:
         url: https://keda.sh/docs/latest/concepts/authentication/
       - type: JSONSchema
         url: trigger-authentication.json
-      - type: JSON-LD
+      - type: JSONLD
         url: keda-context.jsonld
       - type: Reference
         url: https://keda.sh/docs/latest/reference/triggerauthentication-spec/
@@ -143,9 +143,9 @@ common:
     url: https://keda.sh/
   - type: Documentation
     url: https://keda.sh/docs/latest/
-  - type: Getting Started
+  - type: GettingStarted
     url: https://keda.sh/docs/latest/deploy/
-  - type: GitHub Organization
+  - type: GitHubOrganization
     url: https://github.com/kedacore
   - type: GitHubRepository
     url: https://github.com/kedacore/keda
@@ -155,15 +155,15 @@ common:
     url: https://keda.sh/community/
   - type: Slack
     url: https://kubernetes.slack.com/archives/CKZJ36A5D
-  - type: Change Log
+  - type: ChangeLog
     url: https://github.com/kedacore/keda/blob/main/CHANGELOG.md
   - type: Security
     url: https://github.com/kedacore/keda/blob/main/SECURITY.md
-  - type: Stack Overflow
+  - type: StackOverflow
     url: https://stackoverflow.com/questions/tagged/keda
-  - type: JSON-LD
+  - type: JSONLD
     url: keda-context.jsonld
-  - type: JSON-LD
+  - type: JSONLD
     url: json-ld/keda-context.jsonld
   - type: JSONSchema
     url: json-schema/keda-scaled-object-schema.json
