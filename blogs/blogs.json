@@ -2,12 +2,20 @@
   "repo": "keda",
   "feeds": [
     {
-      "source": "https://keda.sh/blog/",
+      "source": "https://keda.sh/blog/index.xml",
       "feed_url": "https://keda.sh/blog/index.xml",
-      "title": "The KEDA Blog on KEDA",
-      "saved": 0
+      "title": "",
+      "saved": 0,
+      "method": "feed"
+    },
+    {
+      "source": "https://github.com/kedacore/keda",
+      "feed_url": "https://github.com/kedacore/keda",
+      "title": "",
+      "saved": 0,
+      "method": "none"
     }
   ],
-  "fetched": "2026-05-17T20:20:35Z",
+  "fetched": "2026-06-01T23:35:02Z",
   "post_count": 17
 }
