@@ -1,0 +1,37 @@
+{
+  "opencollection": "1.0.0",
+  "info": {
+    "name": "KEDA Metrics API",
+    "version": "2.x"
+  },
+  "items": [
+    {
+      "info": {
+        "name": "Metrics",
+        "type": "folder"
+      },
+      "items": [
+        {
+          "info": {
+            "name": "KEDA Get metric value",
+            "type": "http"
+          },
+          "http": {
+            "method": "GET",
+            "url": "http://{host}:{port}/:metricPath",
+            "params": [
+              {
+                "name": "metricPath",
+                "value": "",
+                "type": "path",
+                "description": "The URL path component configured in the KEDA ScaledObject trigger metadata url field. Identifies which metric endpoint to query."
+              }
+            ]
+          },
+          "docs": "Returns a JSON (or other format) payload containing a numeric metric value that KEDA extracts using the configured valueLocation path (GJSON notation). The response can include nested objects; KEDA will navigate to the configured path to read the scalar value. The extracted value can be an unquoted integer (e.g., 42) or a Kubernetes quantity string (e.g., \"10Mi\"). An optional targetValue or activationValue can be compared against this number to determine scaling behavior."
+        }
+      ]
+    }
+  ],
+  "bundled": true
+}

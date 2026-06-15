@@ -1,0 +1,356 @@
+{
+  "item": [
+    {
+      "id": "1765e2f2-7c4e-4eef-b08f-1fcc91a2587f",
+      "name": "Metrics",
+      "description": {
+        "content": "Endpoint returning a numeric metric value that KEDA uses to drive autoscaling decisions via the Horizontal Pod Autoscaler.",
+        "type": "text/plain"
+      },
+      "item": [
+        {
+          "id": "9cacd98b-caac-4ee6-ae25-c095e0cddb82",
+          "name": "KEDA Get metric value",
+          "request": {
+            "name": "KEDA Get metric value",
+            "description": {
+              "content": "Returns a JSON (or other format) payload containing a numeric metric value that KEDA extracts using the configured valueLocation path (GJSON notation). The response can include nested objects; KEDA will navigate to the configured path to read the scalar value. The extracted value can be an unquoted integer (e.g., 42) or a Kubernetes quantity string (e.g., \"10Mi\"). An optional targetValue or activationValue can be compared against this number to determine scaling behavior.",
+              "type": "text/plain"
+            },
+            "url": {
+              "path": [
+                ":metricPath"
+              ],
+              "host": [
+                "{{baseUrl}}"
+              ],
+              "query": [],
+              "variable": [
+                {
+                  "disabled": false,
+                  "type": "any",
+                  "value": "<string>",
+                  "key": "metricPath",
+                  "description": "(Required) The URL path component configured in the KEDA ScaledObject trigger metadata url field. Identifies which metric endpoint to query."
+                },
+                {
+                  "description": "Hostname or IP of the metrics provider service.",
+                  "type": "any",
+                  "value": "{{host}}",
+                  "key": "host"
+                },
+                {
+                  "description": "Port the metrics provider listens on.",
+                  "type": "any",
+                  "value": "{{port}}",
+                  "key": "port"
+                }
+              ]
+            },
+            "header": [
+              {
+                "key": "Accept",
+                "value": "application/json"
+              }
+            ],
+            "method": "GET",
+            "auth": null
+          },
+          "response": [
+            {
+              "id": "d00e883d-ab48-46fc-9489-bfb8c43aa55f",
+              "name": "Metric value payload",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    ":metricPath"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "metricPath",
+                      "description": "(Required) The URL path component configured in the KEDA ScaledObject trigger metadata url field. Identifies which metric endpoint to query."
+                    },
+                    {
+                      "description": "Hostname or IP of the metrics provider service.",
+                      "type": "any",
+                      "value": "{{host}}",
+                      "key": "host"
+                    },
+                    {
+                      "description": "Port the metrics provider listens on.",
+                      "type": "any",
+                      "value": "{{port}}",
+                      "key": "port"
+                    }
+                  ]
+                },
+                "header": [
+                  {
+                    "key": "Accept",
+                    "value": "application/json"
+                  }
+                ],
+                "method": "GET",
+                "body": {}
+              },
+              "status": "OK",
+              "code": 200,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "application/json"
+                }
+              ],
+              "body": "{\n  \"queue_depth\": 42\n}",
+              "cookie": [],
+              "_postman_previewlanguage": "json"
+            },
+            {
+              "id": "84fdcd3a-ce1d-40fc-8384-26b13d2bec36",
+              "name": "Unauthorized — authentication required",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    ":metricPath"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "metricPath",
+                      "description": "(Required) The URL path component configured in the KEDA ScaledObject trigger metadata url field. Identifies which metric endpoint to query."
+                    },
+                    {
+                      "description": "Hostname or IP of the metrics provider service.",
+                      "type": "any",
+                      "value": "{{host}}",
+                      "key": "host"
+                    },
+                    {
+                      "description": "Port the metrics provider listens on.",
+                      "type": "any",
+                      "value": "{{port}}",
+                      "key": "port"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Unauthorized",
+              "code": 401,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "f5572a14-8d58-4b07-ac4a-ddcf847ea40d",
+              "name": "Forbidden — insufficient permissions",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    ":metricPath"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "metricPath",
+                      "description": "(Required) The URL path component configured in the KEDA ScaledObject trigger metadata url field. Identifies which metric endpoint to query."
+                    },
+                    {
+                      "description": "Hostname or IP of the metrics provider service.",
+                      "type": "any",
+                      "value": "{{host}}",
+                      "key": "host"
+                    },
+                    {
+                      "description": "Port the metrics provider listens on.",
+                      "type": "any",
+                      "value": "{{port}}",
+                      "key": "port"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Forbidden",
+              "code": 403,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "73350e4b-b2dd-4967-9890-a91704390b03",
+              "name": "Metric path not found",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    ":metricPath"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "metricPath",
+                      "description": "(Required) The URL path component configured in the KEDA ScaledObject trigger metadata url field. Identifies which metric endpoint to query."
+                    },
+                    {
+                      "description": "Hostname or IP of the metrics provider service.",
+                      "type": "any",
+                      "value": "{{host}}",
+                      "key": "host"
+                    },
+                    {
+                      "description": "Port the metrics provider listens on.",
+                      "type": "any",
+                      "value": "{{port}}",
+                      "key": "port"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Not Found",
+              "code": 404,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            },
+            {
+              "id": "aaaa884a-77d9-497d-86eb-baa56969b8b7",
+              "name": "Internal server error retrieving metric",
+              "originalRequest": {
+                "url": {
+                  "path": [
+                    ":metricPath"
+                  ],
+                  "host": [
+                    "{{baseUrl}}"
+                  ],
+                  "query": [],
+                  "variable": [
+                    {
+                      "disabled": false,
+                      "type": "any",
+                      "value": "<string>",
+                      "key": "metricPath",
+                      "description": "(Required) The URL path component configured in the KEDA ScaledObject trigger metadata url field. Identifies which metric endpoint to query."
+                    },
+                    {
+                      "description": "Hostname or IP of the metrics provider service.",
+                      "type": "any",
+                      "value": "{{host}}",
+                      "key": "host"
+                    },
+                    {
+                      "description": "Port the metrics provider listens on.",
+                      "type": "any",
+                      "value": "{{port}}",
+                      "key": "port"
+                    }
+                  ]
+                },
+                "method": "GET",
+                "body": {}
+              },
+              "status": "Internal Server Error",
+              "code": 500,
+              "header": [
+                {
+                  "key": "Content-Type",
+                  "value": "text/plain"
+                }
+              ],
+              "body": "",
+              "cookie": [],
+              "_postman_previewlanguage": "text"
+            }
+          ],
+          "event": [],
+          "protocolProfileBehavior": {
+            "disableBodyPruning": true
+          }
+        }
+      ],
+      "event": []
+    }
+  ],
+  "event": [],
+  "variable": [
+    {
+      "description": {
+        "content": "Hostname or IP of the metrics provider service.",
+        "type": "text/plain"
+      },
+      "type": "any",
+      "value": "metrics-api",
+      "key": "host"
+    },
+    {
+      "description": {
+        "content": "Port the metrics provider listens on.",
+        "type": "text/plain"
+      },
+      "type": "any",
+      "value": "8080",
+      "key": "port"
+    },
+    {
+      "type": "string",
+      "value": "http://{{host}}:{{port}}",
+      "key": "baseUrl"
+    }
+  ],
+  "info": {
+    "_postman_id": "869fa789-043e-4bd3-8f79-d920567044c9",
+    "name": "KEDA Metrics API",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+    "description": {
+      "content": "KEDA's Metrics API scaler connects to an HTTP endpoint that exposes a numeric metric value, which KEDA uses to drive scaling decisions. The endpoint must return a JSON, Prometheus, XML, or YAML response containing a metric value at a configured path. KEDA polls the endpoint on a configurable interval and compares the extracted value against a threshold to determine the desired replica count for the target workload. This specification describes the interface that an external HTTP metrics endpoint must implement to be compatible with the KEDA Metrics API scaler.\n\nContact Support:\n Name: KEDA Community",
+      "type": "text/plain"
+    }
+  }
+}
