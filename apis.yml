@@ -127,6 +127,10 @@ apis:
       - type: JSONSchema
         url: json-schema/keda-cloud-event-schema.json
 common:
+  - type: DomainSecurity
+    url: security/keda-domain-security.yml
+  - type: Authentication
+    url: authentication/keda-authentication.yml
   - type: Website
     url: https://keda.sh/
   - type: Documentation

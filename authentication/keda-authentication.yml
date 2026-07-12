@@ -1,0 +1,29 @@
+generated: '2026-07-11'
+method: derived
+source: openapi/keda-metrics-api-openapi.yml
+summary:
+  types:
+  - apiKey
+  - http
+  api_key_in:
+  - header
+schemes:
+- name: bearerAuth
+  type: http
+  scheme: bearer
+  description: Bearer token authentication for secured metrics endpoints.
+  sources:
+  - openapi/keda-metrics-api-openapi.yml
+- name: basicAuth
+  type: http
+  scheme: basic
+  description: Basic authentication for secured metrics endpoints.
+  sources:
+  - openapi/keda-metrics-api-openapi.yml
+- name: apiKeyHeader
+  type: apiKey
+  in: header
+  parameter: X-API-Key
+  description: API key authentication via header for secured metrics endpoints.
+  sources:
+  - openapi/keda-metrics-api-openapi.yml
