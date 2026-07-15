@@ -127,6 +127,8 @@ apis:
       - type: JSONSchema
         url: json-schema/keda-cloud-event-schema.json
 common:
+  - type: AgenticAccess
+    url: agentic-access/keda-agentic-access.yml
   - type: DomainSecurity
     url: security/keda-domain-security.yml
   - type: Authentication
