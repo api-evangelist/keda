@@ -1,57 +1,37 @@
 openapi: 3.1.0
 info:
   title: KEDA Metrics API
-  description: >-
-    KEDA's Metrics API scaler connects to an HTTP endpoint that exposes a
-    numeric metric value, which KEDA uses to drive scaling decisions. The
-    endpoint must return a JSON, Prometheus, XML, or YAML response containing
-    a metric value at a configured path. KEDA polls the endpoint on a
-    configurable interval and compares the extracted value against a threshold
-    to determine the desired replica count for the target workload.
-    This specification describes the interface that an external HTTP metrics
-    endpoint must implement to be compatible with the KEDA Metrics API scaler.
-  version: '2.x'
+  description: KEDA's Metrics API scaler connects to an HTTP endpoint that exposes a numeric metric value, which KEDA uses to drive scaling decisions. The endpoint must return a JSON, Prometheus, XML, or YAML response containing a metric value at a configured path. KEDA polls the endpoint on a configurable interval and compares the extracted value against a threshold to determine the desired replica count for the target workload. This specification describes the interface that an external HTTP metrics endpoint must implement to be compatible with the KEDA Metrics API scaler.
+  version: 2.x
   contact:
     name: KEDA Community
     url: https://keda.sh/community/
   license:
     name: Apache 2.0
     url: https://www.apache.org/licenses/LICENSE-2.0
-externalDocs:
-  description: KEDA Metrics API Scaler Documentation
-  url: https://keda.sh/docs/latest/scalers/metrics-api/
 servers:
-  - url: http://{host}:{port}
-    description: External metrics provider endpoint (user-configured)
-    variables:
-      host:
-        default: metrics-api
-        description: Hostname or IP of the metrics provider service.
-      port:
-        default: '8080'
-        description: Port the metrics provider listens on.
+- url: http://{host}:{port}
+  description: External metrics provider endpoint (user-configured)
+  variables:
+    host:
+      default: metrics-api
+      description: Hostname or IP of the metrics provider service.
+    port:
+      default: '8080'
+      description: Port the metrics provider listens on.
 tags:
-  - name: Metrics
-    description: >-
-      Endpoint returning a numeric metric value that KEDA uses to drive
-      autoscaling decisions via the Horizontal Pod Autoscaler.
+- name: Metrics
+  description: Endpoint returning a numeric metric value that KEDA uses to drive autoscaling decisions via the Horizontal Pod Autoscaler.
 paths:
   /{metricPath}:
     get:
       operationId: getMetricValue
       summary: KEDA Get metric value
-      description: >-
-        Returns a JSON (or other format) payload containing a numeric metric
-        value that KEDA extracts using the configured valueLocation path
-        (GJSON notation). The response can include nested objects; KEDA will
-        navigate to the configured path to read the scalar value. The extracted
-        value can be an unquoted integer (e.g., 42) or a Kubernetes quantity
-        string (e.g., "10Mi"). An optional targetValue or activationValue can
-        be compared against this number to determine scaling behavior.
+      description: Returns a JSON (or other format) payload containing a numeric metric value that KEDA extracts using the configured valueLocation path (GJSON notation). The response can include nested objects; KEDA will navigate to the configured path to read the scalar value. The extracted value can be an unquoted integer (e.g., 42) or a Kubernetes quantity string (e.g., "10Mi"). An optional targetValue or activationValue can be compared against this number to determine scaling behavior.
       tags:
-        - Metrics
+      - Metrics
       parameters:
-        - $ref: '#/components/parameters/MetricPath'
+      - $ref: '#/components/parameters/MetricPath'
       responses:
         '200':
           description: Metric value payload
@@ -79,14 +59,22 @@ paths:
         '500':
           description: Internal server error retrieving metric
 components:
+  schemas:
+    MetricsResponse:
+      type: object
+      description: Arbitrary JSON object returned by the external metrics endpoint. KEDA uses GJSON path notation (configured in valueLocation) to extract a single numeric metric value from anywhere in this structure. The shape is fully user-defined.
+      additionalProperties: true
+      example:
+        queue_depth: 42
+        components:
+          worker:
+            tasks: 12
   parameters:
     MetricPath:
       name: metricPath
       in: path
       required: true
-      description: >-
-        The URL path component configured in the KEDA ScaledObject trigger
-        metadata url field. Identifies which metric endpoint to query.
+      description: The URL path component configured in the KEDA ScaledObject trigger metadata url field. Identifies which metric endpoint to query.
       schema:
         type: string
         example: components/stats
@@ -104,17 +92,6 @@ components:
       in: header
       name: X-API-Key
       description: API key authentication via header for secured metrics endpoints.
-  schemas:
-    MetricsResponse:
-      type: object
-      description: >-
-        Arbitrary JSON object returned by the external metrics endpoint.
-        KEDA uses GJSON path notation (configured in valueLocation) to
-        extract a single numeric metric value from anywhere in this
-        structure. The shape is fully user-defined.
-      additionalProperties: true
-      example:
-        queue_depth: 42
-        components:
-          worker:
-            tasks: 12
+externalDocs:
+  description: KEDA Metrics API Scaler Documentation
+  url: https://keda.sh/docs/latest/scalers/metrics-api/
