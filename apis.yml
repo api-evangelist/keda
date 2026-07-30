@@ -6,7 +6,20 @@ description: >-
   resources for defining scaling behavior and supports over 50 built-in scalers for event sources including Kafka,
   RabbitMQ, AWS SQS, Azure Service Bus, and Prometheus.
 type: Index
-image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/apis-json-logo.jpg
+accessModel:
+  pricing: free
+  onboarding: self-serve
+  trial: false
+  try_now: true
+  public: false
+  label: Free · Self-serve signup
+  confidence: high
+  source:
+  - plans
+  - authentication
+  generated: '2026-07-22'
+  method: derived
+image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/icons/keda.png
 tags:
   - Autoscaling
   - CNCF
