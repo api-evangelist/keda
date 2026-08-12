@@ -140,6 +140,17 @@ apis:
       - type: JSONSchema
         url: json-schema/keda-cloud-event-schema.json
 common:
+  - type: IssueTracker
+    url: https://github.com/kedacore/keda/issues
+  - type: Releases
+    url: https://github.com/kedacore/keda/releases
+  - type: CodeOfConduct
+    url: https://github.com/kedacore/.github/blob/main/CODE_OF_CONDUCT.md
+  - type: ContributionGuide
+    url: https://github.com/kedacore/keda/blob/main/CONTRIBUTING.md
+  - type: License
+    name: Apache-2.0
+    url: https://github.com/kedacore/keda/blob/main/LICENSE
   - type: AgenticAccess
     url: agentic-access/keda-agentic-access.yml
   - type: DomainSecurity
