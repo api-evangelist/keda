@@ -1,7 +1,7 @@
 {
   "item": [
     {
-      "id": "1765e2f2-7c4e-4eef-b08f-1fcc91a2587f",
+      "id": "9843e6ee-9b59-4250-bfaa-a38b6e756336",
       "name": "Metrics",
       "description": {
         "content": "Endpoint returning a numeric metric value that KEDA uses to drive autoscaling decisions via the Horizontal Pod Autoscaler.",
@@ -9,7 +9,7 @@
       },
       "item": [
         {
-          "id": "9cacd98b-caac-4ee6-ae25-c095e0cddb82",
+          "id": "0077eea4-5981-4063-9db4-6003a71d0b50",
           "name": "KEDA Get metric value",
           "request": {
             "name": "KEDA Get metric value",
@@ -58,7 +58,7 @@
           },
           "response": [
             {
-              "id": "d00e883d-ab48-46fc-9489-bfb8c43aa55f",
+              "id": "b794aa36-5879-4dbf-adaa-ed3be1967c53",
               "name": "Metric value payload",
               "originalRequest": {
                 "url": {
@@ -113,7 +113,7 @@
               "_postman_previewlanguage": "json"
             },
             {
-              "id": "84fdcd3a-ce1d-40fc-8384-26b13d2bec36",
+              "id": "957137d9-335c-4421-8e48-fecd67d24311",
               "name": "Unauthorized — authentication required",
               "originalRequest": {
                 "url": {
@@ -162,7 +162,7 @@
               "_postman_previewlanguage": "text"
             },
             {
-              "id": "f5572a14-8d58-4b07-ac4a-ddcf847ea40d",
+              "id": "66decd57-171f-4716-9b7f-f0d3428c9c31",
               "name": "Forbidden — insufficient permissions",
               "originalRequest": {
                 "url": {
@@ -211,7 +211,7 @@
               "_postman_previewlanguage": "text"
             },
             {
-              "id": "73350e4b-b2dd-4967-9890-a91704390b03",
+              "id": "83387701-c859-4369-a936-aa89e5acabcd",
               "name": "Metric path not found",
               "originalRequest": {
                 "url": {
@@ -260,7 +260,7 @@
               "_postman_previewlanguage": "text"
             },
             {
-              "id": "aaaa884a-77d9-497d-86eb-baa56969b8b7",
+              "id": "f505d085-1a05-45c1-b954-3babcc7c46c2",
               "name": "Internal server error retrieving metric",
               "originalRequest": {
                 "url": {
@@ -345,7 +345,7 @@
     }
   ],
   "info": {
-    "_postman_id": "869fa789-043e-4bd3-8f79-d920567044c9",
+    "_postman_id": "6dedbb5d-2ba3-4047-870e-3cfb36b7f5fc",
     "name": "KEDA Metrics API",
     "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
     "description": {
