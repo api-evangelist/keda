@@ -21,6 +21,12 @@ accessModel:
   method: derived
 image: https://kinlane-images.s3.amazonaws.com/shared/apis-json/icons/keda.png
 tags:
+  - Auto-Scaling
+  - CNCF
+  - Event-Driven
+  - Graduated
+  - Kubernetes
+tags_raw:
   - Autoscaling
   - CNCF
   - Event-Driven
@@ -60,6 +66,11 @@ apis:
       scaling thresholds, min/max replica counts, and cooldown periods for workload-based autoscaling.
     humanURL: https://keda.sh/docs/latest/concepts/scaling-deployments/
     tags:
+      - Auto-Scaling
+      - CRD
+      - Kubernetes
+      - ScaledObject
+    tags_raw:
       - Autoscaling
       - CRD
       - Kubernetes
@@ -83,6 +94,11 @@ apis:
       work rather than scaling existing long-running deployments, making it suited for batch workloads.
     humanURL: https://keda.sh/docs/latest/concepts/scaling-jobs/
     tags:
+      - Auto-Scaling
+      - CRD
+      - Job
+      - Kubernetes
+    tags_raw:
       - Autoscaling
       - CRD
       - Jobs
@@ -127,6 +143,12 @@ apis:
       AuthenticationFailed. Optional event type filters allow consumers to subscribe to only the events they care about.
     humanURL: https://keda.sh/docs/latest/operate/cloud-events/
     tags:
+      - CloudEvents
+      - CRD
+      - Event
+      - Kubernetes
+      - Webhook
+    tags_raw:
       - CloudEvents
       - CRD
       - Events
