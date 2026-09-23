@@ -1,7 +1,7 @@
-openapi: 3.1.0
+openapi: 3.2.0
 info:
   title: KEDA Metrics API
-  description: KEDA's Metrics API scaler connects to an HTTP endpoint that exposes a numeric metric value, which KEDA uses to drive scaling decisions. The endpoint must return a JSON, Prometheus, XML, or YAML response containing a metric value at a configured path. KEDA polls the endpoint on a configurable interval and compares the extracted value against a threshold to determine the desired replica count for the target workload. This specification describes the interface that an external HTTP metrics endpoint must implement to be compatible with the KEDA Metrics API scaler.
+  description: KEDA's Metrics API scaler connects to an HTTP endpoint that exposes a numeric metric value, which KEDA uses to drive scaling decisions.
   version: 2.x
   contact:
     name: KEDA Community
@@ -59,6 +59,15 @@ paths:
         '500':
           description: Internal server error retrieving metric
 components:
+  parameters:
+    MetricPath:
+      name: metricPath
+      in: path
+      required: true
+      description: The URL path component configured in the KEDA ScaledObject trigger metadata url field. Identifies which metric endpoint to query.
+      schema:
+        type: string
+        example: components/stats
   schemas:
     MetricsResponse:
       type: object
@@ -69,15 +78,6 @@ components:
         components:
           worker:
             tasks: 12
-  parameters:
-    MetricPath:
-      name: metricPath
-      in: path
-      required: true
-      description: The URL path component configured in the KEDA ScaledObject trigger metadata url field. Identifies which metric endpoint to query.
-      schema:
-        type: string
-        example: components/stats
   securitySchemes:
     bearerAuth:
       type: http
