@@ -59,15 +59,6 @@ paths:
         '500':
           description: Internal server error retrieving metric
 components:
-  parameters:
-    MetricPath:
-      name: metricPath
-      in: path
-      required: true
-      description: The URL path component configured in the KEDA ScaledObject trigger metadata url field. Identifies which metric endpoint to query.
-      schema:
-        type: string
-        example: components/stats
   schemas:
     MetricsResponse:
       type: object
@@ -78,6 +69,15 @@ components:
         components:
           worker:
             tasks: 12
+  parameters:
+    MetricPath:
+      name: metricPath
+      in: path
+      required: true
+      description: The URL path component configured in the KEDA ScaledObject trigger metadata url field. Identifies which metric endpoint to query.
+      schema:
+        type: string
+        example: components/stats
   securitySchemes:
     bearerAuth:
       type: http
