@@ -6,6 +6,7 @@ checked:
 - https://github.com/cncf/landscape
 - https://github.com/open-telemetry/opentelemetry.io/blob/main/data/ecosystem/vendors.yaml
 - https://github.com/open-telemetry/opentelemetry.io/blob/main/data/registry/
+- artifact-hub/integrations/artifact-hub-integration-edges.yml
 marketplace_apps: []
 edges:
 - partner_name: OpenTelemetry
@@ -65,6 +66,25 @@ edges:
     detected: '2026-10-19'
   detected_by: sweep-cloud-native.py
   first_seen: '2026-10-15'
+- partner_name: Artifact Hub (artifact-hub)
+  partner: artifact-hub
+  partner_match: mirror
+  mirror_match: domain
+  type: marketplace
+  relationship: platform-app
+  direction: third-party
+  channel: partner-built
+  marketplace: artifact-hub
+  evidence: https://artifacthub.io/packages/search?repo=keda-official-external-scalers
+  mirror_of: artifact-hub/integrations/artifact-hub-integration-edges.yml
+  apps:
+  - KEDA HTTP
+  listing_count: 1
+  detected: '2026-10-22'
+  detected_by: mirror-platform-listings.py
+  category: Artifact Hub listing (KEDA scaler)
+  badges:
+  - 'Verified publisher (Artifact Hub verified publisher: repository ownership proven)'
 source:
 - https://github.com/open-telemetry/opentelemetry.io/blob/main/data/ecosystem/vendors.yaml
 - https://github.com/open-telemetry/opentelemetry.io/blob/main/data/registry/
