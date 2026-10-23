@@ -75,3 +75,43 @@
   relationship: platform-app
   status: not-a-workflow
   arazzo: null
+- slug: keda-openssf-best-practices-badge-bestpractices-dev
+  label: OpenSSF Best Practices Badge (bestpractices.dev)
+  partner_name: OpenSSF Best Practices Badge (bestpractices.dev)
+  category: OpenSSF Best Practices badge (open-source project security practices)
+  type: register
+  channel: standard-directory
+  evidence: https://www.bestpractices.dev/en/projects/3791
+  source: edge
+  relationship: standard-participant
+  contract_reference:
+    register: OpenSSF Best Practices Badge projects (www.bestpractices.dev/en/projects.json)
+    standard: OpenSSF Best Practices Badge criteria (passing / silver / gold)
+    spec_file: null
+    role: badged-project-owner
+    registered_name: keda
+    matched_domain: keda.sh
+    matched_by: domain
+    certified_products:
+    - product: open-source project
+      product_type: open-source project
+      standard: OpenSSF Best Practices Badge criteria (passing / silver / gold)
+      partner_tier: passing
+      lapsed: false
+      badge_date: '2022-08-09'
+    badged_projects:
+    - name: keda
+      id: 3791
+      badge: passing
+      url: https://www.bestpractices.dev/en/projects/3791
+    - name: KEDA HTTP Add-on
+      id: 12745
+      badge: passing
+      url: https://www.bestpractices.dev/en/projects/12745
+    signal_note: 'certified_products = ONE entry per provider (product type open-source project): highest current
+      OpenSSF Best Practices badge level in partner_tier, earliest date at that level; lapsed: true when every linked
+      project lost its badge. badged_projects is context, never counted'
+    detected_by: sweep-openssf-best-practices-badges.py
+    detected: '2026-10-22'
+  status: not-a-workflow
+  arazzo: null
