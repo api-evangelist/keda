@@ -1,4 +1,4 @@
-# KEDA (keda)
+# KEDA
 
 <!-- API-EVANGELIST-PROVENANCE:BEGIN -->
 > ### About this repository
@@ -66,157 +66,156 @@
 
 KEDA (Kubernetes Event Driven Autoscaling) is a CNCF graduated application autoscaler that drives scaling of any container in Kubernetes based on the number of events needing to be processed. It extends Kubernetes with custom resources for defining scaling behavior and supports over 50 built-in scalers for event sources including Kafka, RabbitMQ, AWS SQS, Azure Service Bus, and Prometheus.
 
-**APIs.json:** [https://raw.githubusercontent.com/api-evangelist/keda/refs/heads/main/apis.yml](https://raw.githubusercontent.com/api-evangelist/keda/refs/heads/main/apis.yml)
+**Areas:** Auto-Scaling · CNCF · Event-Driven · Graduated · Kubernetes · Cloud-Native
 
-## Scope
+## KEDA on APIs.io
 
-- **Type:** Index
+Everything profiled for KEDA is published on APIs.io rather than in this repository. Start at the provider page — **[apis.io/providers/keda/](https://apis.io/providers/keda/)** — or go straight to one of the APIs or properties below.
 
-## Tags
+### APIs (5)
 
-- Autoscaling
-- CNCF
-- Event-Driven
-- Graduated
-- Kubernetes
+- [KEDA Metrics API](https://apis.io/apis/keda/keda-metrics-api/) — External metrics API server that exposes event-driven metrics from configured scalers to the Kubernetes Horizontal Pod Autoscaler. It implements the…
+- [KEDA ScaledObject API](https://apis.io/apis/keda/keda-scaled-object-api/) — The ScaledObject custom resource defines the mapping between an event source and a Kubernetes Deployment, StatefulSet, or custom resource that should be…
+- [KEDA ScaledJob API](https://apis.io/apis/keda/keda-scaled-job-api/) — The ScaledJob custom resource defines the mapping between an event source and Kubernetes Jobs that should be created in response to events. Unlike…
+- [KEDA TriggerAuthentication API](https://apis.io/apis/keda/keda-trigger-authentication-api/) — The TriggerAuthentication and ClusterTriggerAuthentication custom resources define authentication parameters for KEDA trigger scalers, allowing credentials…
+- [KEDA CloudEventSource API](https://apis.io/apis/keda/keda-cloud-event-source-api/) — The CloudEventSource and ClusterCloudEventSource custom resources define HTTP or Azure Event Grid destinations where KEDA delivers CloudEvents when scaling…
 
-## Timestamps
+### Published properties
 
-- **Created:** 2025-01-01
-- **Modified:** 2026-05-19
+Each property below is a page on APIs.io carrying the machine-readable artifact and what it says.
 
-## APIs
+#### AsyncAPI (1)
 
-### KEDA Metrics API
+Event-driven and webhook contracts.
 
-External metrics API server that exposes event-driven metrics from configured scalers to the Kubernetes Horizontal Pod Autoscaler. It implements the Kubernetes external metrics API interface, allowing the HPA controller to query scaler-derived metrics when making scaling decisions.
+- [KEDA CloudEvent Source](https://apis.io/asyncapis/keda/keda-cloud-events-asyncapi/)
 
-- **Human URL:** [https://keda.sh/docs/latest/operate/metrics-server/](https://keda.sh/docs/latest/operate/metrics-server/)
+#### Event channels (1)
 
-#### Tags
+Individual events and webhooks the provider emits.
 
-- External Metrics
-- HPA
-- Kubernetes
-- Metrics
+- [/events](https://apis.io/channels/keda/events/)
 
-#### Properties
+#### Agentic access (1)
 
-- [Documentation](https://keda.sh/docs/latest/operate/metrics-server/)
-- [Getting Started](https://keda.sh/docs/latest/deploy/)
-- [Reference](https://keda.sh/docs/latest/concepts/)
-- [OpenAPI](openapi/keda-metrics-api-openapi.yml) — [OpenAPI Specification](https://spec.openapis.org/oas/latest.html)
-- [Postman Collection](collections/keda-metrics-api.postman_collection.json) — [Postman Collection 2.1](https://schema.getpostman.com/json/collection/v2.1.0/collection.json)
-- [Open Collection](collections/keda-metrics-api.opencollection.json) — [Open Collection 1.0](https://schema.opencollection.com/opencollection/v1.0.0.json)
+Which operations an agent can call, which act, and which need a human in the loop.
 
-### KEDA ScaledObject API
+- [Keda Agentic Access](https://apis.io/agentic-access/keda/keda-agentic-access/)
 
-The ScaledObject custom resource defines the mapping between an event source and a Kubernetes Deployment, StatefulSet, or custom resource that should be scaled based on event metrics. It specifies trigger scalers, scaling thresholds, min/max replica counts, and cooldown periods for workload-based autoscaling.
+#### JSON Schema (2)
 
-- **Human URL:** [https://keda.sh/docs/latest/concepts/scaling-deployments/](https://keda.sh/docs/latest/concepts/scaling-deployments/)
+The data models the API reads and writes.
 
-#### Tags
+- [KEDA CloudEvent](https://apis.io/schemas/keda/keda-cloud-event/)
+- [KEDA ScaledObject](https://apis.io/schemas/keda/keda-scaled-object/)
 
-- Autoscaling
-- CRD
-- Kubernetes
-- ScaledObject
+#### JSON-LD (1)
 
-#### Properties
+Linked-data contexts for the provider's vocabulary.
 
-- [Documentation](https://keda.sh/docs/latest/concepts/scaling-deployments/)
-- [JSON Schema](scaled-object.json) — [JSON Schema](https://json-schema.org/specification)
-- [JSON Schema](json-schema/keda-scaled-object-schema.json) — [JSON Schema](https://json-schema.org/specification)
-- [JSON-LD](keda-context.jsonld) — [JSON-LD](https://www.w3.org/TR/json-ld11/)
-- [Reference](https://keda.sh/docs/latest/reference/scaledobject-spec/)
-- [Postman Collection](collections/keda-metrics-api.postman_collection.json) — [Postman Collection 2.1](https://schema.getpostman.com/json/collection/v2.1.0/collection.json)
-- [Open Collection](collections/keda-metrics-api.opencollection.json) — [Open Collection 1.0](https://schema.opencollection.com/opencollection/v1.0.0.json)
+- [Keda Context](https://apis.io/jsonld/keda/keda-context/)
 
-### KEDA ScaledJob API
+#### Collections (1)
 
-The ScaledJob custom resource defines the mapping between an event source and Kubernetes Jobs that should be created in response to events. Unlike ScaledObject, ScaledJob creates new Job instances to process each unit of work rather than scaling existing long-running deployments, making it suited for batch workloads.
+Postman and Open Collection request collections.
 
-- **Human URL:** [https://keda.sh/docs/latest/concepts/scaling-jobs/](https://keda.sh/docs/latest/concepts/scaling-jobs/)
+- [KEDA Metrics API](https://apis.io/collections/keda/open-keda-metrics-api/)
 
-#### Tags
+#### Governance rules (2)
 
-- Autoscaling
-- CRD
-- Jobs
-- Kubernetes
+Spectral rulesets for the provider's contracts.
 
-#### Properties
+- [KEDA — asyncapi rules](https://apis.io/rules/keda/keda-asyncapi-spectral-rules/)
+- [KEDA — jsonschema rules](https://apis.io/rules/keda/keda-jsonschema-spectral-rules/)
 
-- [Documentation](https://keda.sh/docs/latest/concepts/scaling-jobs/)
-- [JSON Schema](scaled-job.json) — [JSON Schema](https://json-schema.org/specification)
-- [JSON-LD](keda-context.jsonld) — [JSON-LD](https://www.w3.org/TR/json-ld11/)
-- [Reference](https://keda.sh/docs/latest/reference/scaledjob-spec/)
-- [Postman Collection](collections/keda-metrics-api.postman_collection.json) — [Postman Collection 2.1](https://schema.getpostman.com/json/collection/v2.1.0/collection.json)
-- [Open Collection](collections/keda-metrics-api.opencollection.json) — [Open Collection 1.0](https://schema.opencollection.com/opencollection/v1.0.0.json)
+#### Security (2)
 
-### KEDA TriggerAuthentication API
+Authentication, trust centre, and vulnerability disclosure.
 
-The TriggerAuthentication and ClusterTriggerAuthentication custom resources define authentication parameters for KEDA trigger scalers, allowing credentials to be sourced from Kubernetes Secrets, environment variables, pod identity providers such as AWS IRSA or Azure Workload Identity, or HashiCorp Vault without embedding them in the ScaledObject.
+- [Keda Authentication](https://apis.io/security/keda/keda-authentication/)
+- [Keda Domain Security](https://apis.io/security/keda/keda-domain-security/)
 
-- **Human URL:** [https://keda.sh/docs/latest/concepts/authentication/](https://keda.sh/docs/latest/concepts/authentication/)
+#### Plans and pricing (1)
 
-#### Tags
+Published plans, tiers and prices.
 
-- Authentication
-- CRD
-- Kubernetes
-- Security
+- [Keda Plans Pricing](https://apis.io/plans/keda/keda-plans-pricing/)
 
-#### Properties
+#### Rate limits (1)
 
-- [Documentation](https://keda.sh/docs/latest/concepts/authentication/)
-- [JSON Schema](trigger-authentication.json) — [JSON Schema](https://json-schema.org/specification)
-- [JSON-LD](keda-context.jsonld) — [JSON-LD](https://www.w3.org/TR/json-ld11/)
-- [Reference](https://keda.sh/docs/latest/reference/triggerauthentication-spec/)
-- [Postman Collection](collections/keda-metrics-api.postman_collection.json) — [Postman Collection 2.1](https://schema.getpostman.com/json/collection/v2.1.0/collection.json)
-- [Open Collection](collections/keda-metrics-api.opencollection.json) — [Open Collection 1.0](https://schema.opencollection.com/opencollection/v1.0.0.json)
+Published request limits.
 
-### KEDA CloudEventSource API
+- [Keda Rate Limits](https://apis.io/rate-limits/keda/keda-rate-limits/)
 
-The CloudEventSource and ClusterCloudEventSource custom resources define HTTP or Azure Event Grid destinations where KEDA delivers CloudEvents when scaling events occur. Events follow the CloudEvents specification v1.0 and carry reason codes and messages for events such as ScalerError, ScaledObjectReady, ScaledObjectDeleted, and AuthenticationFailed. Optional event type filters allow consumers to subscribe to only the events they care about.
+#### FinOps (1)
 
-- **Human URL:** [https://keda.sh/docs/latest/operate/cloud-events/](https://keda.sh/docs/latest/operate/cloud-events/)
+What the API costs to run, by operation.
 
-#### Tags
+- [Keda Finops](https://apis.io/finops/keda/keda-finops/)
 
-- CloudEvents
-- CRD
-- Events
-- Kubernetes
-- Webhooks
+## Where to find this API
 
-#### Properties
-
-- [Documentation](https://keda.sh/docs/latest/operate/cloud-events/)
-- [AsyncAPI](asyncapi/keda-cloud-events-asyncapi.yml) — [AsyncAPI Specification](https://www.asyncapi.com/docs/reference/specification/latest)
-- [JSON Schema](json-schema/keda-cloud-event-schema.json) — [JSON Schema](https://json-schema.org/specification)
-- [Postman Collection](collections/keda-metrics-api.postman_collection.json) — [Postman Collection 2.1](https://schema.getpostman.com/json/collection/v2.1.0/collection.json)
-- [Open Collection](collections/keda-metrics-api.opencollection.json) — [Open Collection 1.0](https://schema.opencollection.com/opencollection/v1.0.0.json)
-
-## Common Properties
+Links to the company's own pages. This repository publishes no copy of their specifications — the canonical document is theirs and lives at the URLs below.
 
 - [Website](https://keda.sh/)
 - [Documentation](https://keda.sh/docs/latest/)
-- [Getting Started](https://keda.sh/docs/latest/deploy/)
-- [GitHub Organization](https://github.com/kedacore)
-- [GitHub Repository](https://github.com/kedacore/keda)
-- [Blog](https://keda.sh/blog/)
-- [Community](https://keda.sh/community/)
-- [Slack](https://kubernetes.slack.com/archives/CKZJ36A5D)
+- [Getting started](https://keda.sh/docs/latest/deploy/)
 - [Changelog](https://github.com/kedacore/keda/blob/main/CHANGELOG.md)
+- [Blog](https://keda.sh/blog/)
 - [Security](https://github.com/kedacore/keda/blob/main/SECURITY.md)
-- [Stack Overflow](https://stackoverflow.com/questions/tagged/keda)
-- [JSON-LD](keda-context.jsonld) — [JSON-LD](https://www.w3.org/TR/json-ld11/)
-- [JSON-LD](json-ld/keda-context.jsonld) — [JSON-LD](https://www.w3.org/TR/json-ld11/)
-- [JSON Schema](json-schema/keda-scaled-object-schema.json) — [JSON Schema](https://json-schema.org/specification)
-- [JSON Schema](json-schema/keda-cloud-event-schema.json) — [JSON Schema](https://json-schema.org/specification)
+- [GitHub](https://github.com/kedacore)
 
-## Maintainers
+## API Evangelist rating
 
-**FN:** Kin Lane
-**Email:** kin@apievangelist.com
+**Kin Score 45.6** — developing · rubric 0.25.0 · scored 2026-10-23
+
+| Facet | Score |
+|---|---|
+| Discoverability | 62.5 |
+| Contract quality | 67.3 |
+| Contract governance | 13.6 |
+| Operational transparency | 34.2 |
+| Developer ergonomics | 45.2 |
+| Access clarity | 5.3 |
+
+**Agent readiness 27.8** — agent-aware
+
+| Agent-readiness dimension | Result |
+|---|---|
+| Spec Presence | yes |
+| Agentic Access | derived (partial credit) |
+| Reversibility Documented | na |
+| MCP Server | — |
+| Auth Clarity | bearer (partial credit) |
+| Idempotency | na |
+| Error Semantics | — |
+| OpenAPI Examples | verified |
+| Rate Limit Signal | derived (partial credit) |
+| Event Surface Described | derived (partial credit) |
+| Agent Skills | — |
+| Well Known Catalog | — |
+| Consent Identity | — |
+| Agent Card | — |
+| Dry Run Mode | na |
+| Delegated Identity | — |
+| Protected Resource Metadata | — |
+| Dynamic Client Registration | — |
+| Agentic Commerce | — |
+| Pagination Ratio | na |
+| Operation Distinctiveness | na |
+
+**Regulatory alignment 16.7** — Horizontal (data, software, accessibility, platform)
+
+The rubric is published at [github.com/api-evangelist/kin-score](https://github.com/api-evangelist/kin-score). The per-check breakdown behind these numbers — which checks were earned, partial or missed — along with score history and how this provider compares to its peers, is available at [apis.io/providers/keda/](https://apis.io/providers/keda/).
+
+## How this profile is made
+
+API Evangelist profiles a company's public API surface the way a developer would find it: the website, developer portal and documentation, the specifications it publishes, its public repositories, and its pricing, status and changelog pages. From that it derives the properties above — contracts split per API, workflows, schemas, collections, governance rules, plans and rate limits — and scores them against the published [Kin Score rubric](https://github.com/api-evangelist/kin-score).
+
+The artifacts are published on [APIs.io](https://apis.io), not in this repository. This repository is the public record for KEDA: the place to say something is wrong, missing or out of date, and to ask for a re-score or a removal.
+
+## Open an issue
+
+- **Something about this listing** — a wrong description, a missing API, a stale artifact or a question about the rating: [open an issue on this repository](https://github.com/api-evangelist/keda/issues/new).
+- **A new API, or one that is not in the catalog yet** — [submit it on APIs.io](https://apis.io/add/).
+- **Anything else** — [the APIs.io inbox](https://github.com/api-search/inbox/issues/new) or [info@apievangelist.com](mailto:info@apievangelist.com).
